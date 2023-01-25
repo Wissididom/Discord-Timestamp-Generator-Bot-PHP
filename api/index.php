@@ -58,6 +58,8 @@ switch ($jsonReq["type"]) {
         $outputJson = false;
     break;
 }
-if ($outputJson)
+if ($outputJson) {
+    header("Content-Type: application/json");
     echo json_encode($responseObj);
+}
 ?>

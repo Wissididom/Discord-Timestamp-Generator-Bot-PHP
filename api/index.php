@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 $PUBLIC_KEY = '4f5a52fc3192dac7356d0352d8cf9eec9a1c906b30eaf1c959fda5a0679260e5';
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     http_response_code(405);
@@ -7,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "405 Method Not Allowed";
     return;
 }
-$signature = $_SERVER['HTTP_X_SIGNATURE_ED25519');
+$signature = $_SERVER['HTTP_X_SIGNATURE_ED25519'];
 $timestamp = $_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'];
 $strReq = file_get_contents('php://input');
 if (!sodium_crypto_sign_verify_detached(sodium_hex2bin($signature), $timestamp . $strReq, sodium_hex2bin($PUBLIC_KEY))) {

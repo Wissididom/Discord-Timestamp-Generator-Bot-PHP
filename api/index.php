@@ -29,6 +29,9 @@ switch ($jsonReq["type"]) {
         $responseObj["type"] = 1; // PONG
         break;
     case 2: // APPLICATION_COMMAND
+        ignore_user_abort(true);
+        set_time_limit(0);
+        ob_start();
         //$responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["data"] = [];
@@ -46,6 +49,15 @@ switch ($jsonReq["type"]) {
         if ($options["ephemeral"]) {
             $responseObj["data"]["flags"] = 64; // https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags
         }
+        if ($outputJson) {
+            header("Content-Type: application/json");
+            echo str_replace(',"data":[]', '', json_encode($responseObj));
+        }
+        header("Connection: close");
+        header("Content-Length: " . ob_get_length());
+        ob_end_flush();
+        ob_flush();
+        flush();
         // TODO: Send Request to edit initial response
         break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE

@@ -34,7 +34,7 @@ switch ($jsonReq["type"]) {
     break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
         // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete
-        if ($jsonReq["name"] == 'timestamp') {
+        if ($jsonReq["data"]["name"] == 'timestamp') {
             $responseObj["type"] = 8; // APPLICATION_COMMAND_AUTOCOMPLETE_RESULT
             for ($i = 0; $i < count($jsonReq["data"]["options"]); $i++) {
                 if (is_null($jsonReq["data"]["options"][$i]["focused"]) || !$jsonReq["data"]["options"][$i]["focused"])

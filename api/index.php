@@ -32,7 +32,7 @@ switch ($jsonReq["type"]) {
         //$responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["data"] = [];
-        $ephemeral = array_filter($jsonReq["data"]["options"] function($option) {
+        $ephemeral = array_filter($jsonReq["data"]["options"], function($option) {
             return $option["name"] = "ephemeral";
         });
         if (isset($ephemeral) && $ephemeral["value"]) {

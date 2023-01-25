@@ -39,11 +39,11 @@ switch ($jsonReq["type"]) {
             for ($i = 0; $i < count($jsonReq["data"]["options"]); $i++) {
                 if (is_null($jsonReq["data"]["options"][$i]["focused"]) || !$jsonReq["data"]["options"][$i]["focused"])
                     continue;
-                $timezones = array_filter(DateTimeZone::listIdentifiers(), fn($tz) => {
+                $timezones = array_filter(DateTimeZone::listIdentifiers(), function($tz)  {
                     return str_contains(strtolower(zone), strtolower(str_replace(" ", "_", $jsonReq["data"]["options"][$i])));
                 });
                 $timezones = array_slice($timezones, 0, 25);
-                $responseObj["data"] = array_map(fn($tz) => {
+                $responseObj["data"] = array_map(function($tz) {
                     return [
                         "name" => $tz,
                         "value" => $tz

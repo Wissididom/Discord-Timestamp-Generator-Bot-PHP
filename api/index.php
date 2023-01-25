@@ -76,6 +76,6 @@ switch ($jsonReq["type"]) {
 }
 if ($outputJson) {
     header("Content-Type: application/json");
-    echo json_encode($responseObj);
+    echo str_replace(',"data":[]', '', json_encode($responseObj));
 }
 ?>

@@ -32,7 +32,10 @@ switch ($jsonReq["type"]) {
         //$responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["data"] = [];
-        if (true) { // TODO: Ephemeral
+        $ephemeral = array_filter($jsonReq["data"]["options"] function($option) {
+            return $option["name"] = "ephemeral";
+        });
+        if (isset($ephemeral) && $ephemeral["value"]) {
             $responseObj["data"]["flags"] = 64; // https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags
         }
         // TODO: Send Request to edit initial response

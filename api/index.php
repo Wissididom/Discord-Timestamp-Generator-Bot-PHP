@@ -33,7 +33,7 @@ switch ($jsonReq["type"]) {
         $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["data"] = [];
         $ephemeral = array_filter($jsonReq["data"]["options"], function($option) {
-            return $option["name"] = "ephemeral";
+            return $option["name"] == "ephemeral";
         });
         if (count($ephemeral) > 0 && $ephemeral[0]["value"]) {
             print_r($ephemeral);

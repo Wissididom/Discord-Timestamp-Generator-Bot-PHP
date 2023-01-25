@@ -1,4 +1,10 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    http_response_code(405);
+    header('Allow: POST');
+    echo "405 Method Not Allowed";
+    return;
+}
 $jsonReq = json_decode(file_get_contents('php://input'), true);
 if (is_null($jsonReq)) {
     http_response_code(400);

@@ -1,4 +1,6 @@
 <?php
+// Request-Types: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
+// Response-Types: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type
 $PUBLIC_KEY = '4f5a52fc3192dac7356d0352d8cf9eec9a1c906b30eaf1c959fda5a0679260e5';
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     http_response_code(405);
@@ -21,13 +23,34 @@ if (is_null($jsonReq)) {
     return;
 }
 $outputJson = true;
-$responseObj = array();
-switch ($jsonReq['type']) {
-    case 1: // InteractionType::Ping
-        $responseObj["type"] = 1; // InteractionResponseType::Pong
+$responseObj = [];
+switch ($jsonReq["type"]) {
+    case 1: // PING
+        $responseObj["type"] = 1; // PONG
     break;
-    case 2:
-        $responseObj["type"] = 2; // InteractionResponseType::Acknowledge
+    case 2: // APPLICATION_COMMAND
+        $responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
+        //$responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+    break;
+    case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
+        // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete
+        if ($jsonReq["name"] == 'timestamp') {
+            $responseObj["type"] = 8; // APPLICATION_COMMAND_AUTOCOMPLETE_RESULT
+            for ($i = 0; $i < count($jsonReq["data"]["options"]); $i++) {
+                if (is_null($jsonReq["data"]["options"][$i]["focused"]) || !$jsonReq["data"]["options"][$i]["focused"])
+                    continue;
+                $timezones = array_filter(DateTimeZone::listIdentifiers(), fn($tz) => {
+                    return str_contains(strtolower(zone), strtolower(str_replace(" ", "_", $jsonReq["data"]["options"][$i])));
+                });
+                $timezones = array_slice($timezones, 0, 25);
+                $responseObj["data"] = array_map(fn($tz) => {
+                    return [
+                        "name" => $tz,
+                        "value" => $tz
+                    ];
+                });
+            }
+        }
     break;
     default:
         http_response_code(400);

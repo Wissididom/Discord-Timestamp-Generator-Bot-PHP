@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 $PUBLIC_KEY = '4f5a52fc3192dac7356d0352d8cf9eec9a1c906b30eaf1c959fda5a0679260e5';
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     http_response_code(405);

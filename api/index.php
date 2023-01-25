@@ -27,20 +27,27 @@ $responseObj = [];
 switch ($jsonReq["type"]) {
     case 1: // PING
         $responseObj["type"] = 1; // PONG
-    break;
+        break;
     case 2: // APPLICATION_COMMAND
         //$responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
         $responseObj["data"] = [];
-        $ephemeral = array_filter($jsonReq["data"]["options"], function($option) {
-            return $option["name"] == "ephemeral";
-        });
-        print_r($ephemeral);
-        if (count($ephemeral) > 0 && $ephemeral[0]["value"]) {
+        $options = [
+            "ephemeral" => true
+        ];
+        for ($i = 0; $i < count($jsonReq["data"]["options"]); $i++) {
+            switch ($jsonReq["data"]["options"][$i]["name"]) {
+                case "ephemeral":
+                    if ($jsonReq["data"]["options"][$i]["value"] == false)
+                        $options["ephemeral"] = false;
+                    break;
+            }
+        }
+        if ($options["ephemeral"]) {
             $responseObj["data"]["flags"] = 64; // https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags
         }
         // TODO: Send Request to edit initial response
-    break;
+        break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
         // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete
         if ($jsonReq["data"]["name"] == 'timestamp') {
@@ -60,12 +67,12 @@ switch ($jsonReq["type"]) {
                 });
             }
         }
-    break;
+        break;
     default:
         http_response_code(400);
         echo "400 Bad Request";
         $outputJson = false;
-    break;
+        break;
 }
 if ($outputJson) {
     header("Content-Type: application/json");

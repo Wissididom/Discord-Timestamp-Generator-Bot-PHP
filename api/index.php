@@ -36,6 +36,7 @@ switch ($jsonReq["type"]) {
             return $option["name"] = "ephemeral";
         });
         if (count($ephemeral) > 0 && $ephemeral[0]["value"]) {
+            print_r($ephemeral);
             $responseObj["data"]["flags"] = 64; // https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags
         }
         // TODO: Send Request to edit initial response

@@ -29,8 +29,13 @@ switch ($jsonReq["type"]) {
         $responseObj["type"] = 1; // PONG
     break;
     case 2: // APPLICATION_COMMAND
-        $responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
-        //$responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+        //$responseObj["type"] = 4; // CHANNEL_MESSAGE_WITH_SOURCE
+        $responseObj["type"] = 5; // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+        $responseObj["data"] = [];
+        if (true) { // TODO: Ephemeral
+            $responseObj["data"]["flags"] = 64; // https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageFlags
+        }
+        // TODO: Send Request to edit initial response
     break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
         // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete

@@ -54,8 +54,6 @@ switch ($jsonReq["type"]) {
             header("Content-Type: application/json");
             echo str_replace(',"data":[]', '', json_encode($responseObj));
         }
-        header("Connection: close");
-        header("Content-Length: " . ob_get_length());
         ob_end_flush();
         ob_flush();
         flush();
@@ -73,6 +71,7 @@ switch ($jsonReq["type"]) {
         ]);
         $patchResponse = curl_exec($curl);
         curl_close($curl);
+        error_log($patchResponse);
         break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
         // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete

@@ -64,7 +64,7 @@ switch ($jsonReq["type"]) {
             "content" => $msgContent
         ];
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, f"https://discord.com/api/v10/webhooks/{$APPLICATION_ID}/{$jsonReq["token"]}/messages/@original");
+        curl_setopt($curl, CURLOPT_URL, "https://discord.com/api/v10/webhooks/$APPLICATION_ID/$jsonReq['token']/messages/@original");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PATCH");
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($responseObj));

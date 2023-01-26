@@ -2,6 +2,7 @@
 // Request-Types: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
 // Response-Types: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type
 $PUBLIC_KEY = '4f5a52fc3192dac7356d0352d8cf9eec9a1c906b30eaf1c959fda5a0679260e5';
+$APPLICATION_ID = '1026494571988918272';
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     http_response_code(405);
     header('Allow: POST');
@@ -58,7 +59,20 @@ switch ($jsonReq["type"]) {
         ob_end_flush();
         ob_flush();
         flush();
-        // TODO: Send Request to edit initial response
+        $msgContent = "Test";
+        $responseObj = [
+            "content" => $msgContent
+        ];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, f"https://discord.com/api/v10/webhooks/{$APPLICATION_ID}/{$jsonReq["token"]}/messages/@original");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($responseObj));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json"
+        ]);
+        $patchResponse = curl_exec($curl);
+        curl_close($curl);
         break;
     case 4: // APPLICATION_COMMAND_AUTOCOMPLETE
         // Response Object: https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete

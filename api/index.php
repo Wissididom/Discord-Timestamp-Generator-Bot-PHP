@@ -12,11 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 $signature = $_SERVER['HTTP_X_SIGNATURE_ED25519'];
 $timestamp = $_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'];
 $strReq = file_get_contents('php://input');
-/*if (!sodium_crypto_sign_verify_detached(sodium_hex2bin($signature), $timestamp . $strReq, sodium_hex2bin($PUBLIC_KEY))) {
+if (!sodium_crypto_sign_verify_detached(sodium_hex2bin($signature), $timestamp . $strReq, sodium_hex2bin($PUBLIC_KEY))) {
     http_response_code(401);
     echo "401 Unauthorized - Signature Validation Failed!";
     return;
-}*/
+}
 $jsonReq = json_decode($strReq, true);
 if (is_null($jsonReq)) {
     http_response_code(400);
